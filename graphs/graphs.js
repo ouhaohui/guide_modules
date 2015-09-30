@@ -5,6 +5,22 @@ require.config({
     }
 });
 define(['util'],function(util){
+    function wheel(){
+		var wheel_num=1;
+		function animate(){
+            //console.log(wheel_num);
+			if($(".guide-mousewheel").length < 1){
+				return;
+			}
+			$(".guide-mousewheel").attr("src","../../templates/default/assets/image/wheel"+wheel_num+".png");
+            wheel_num++;
+			if(wheel_num==5){
+				wheel_num = 1;
+			}
+			return setTimeout(animate,30);
+		}
+		return setTimeout(animate,30);
+	}
     function createArrow(lightObject,part,step,stepNode){ //lightObject 指向对象，part 动画对象的part，step = guide.step stepNode = guide.stepNode
 		 	var text = text ||"text",
 		 		arrow = "<div class=\"guide-arrow-div\"></div>",
@@ -23,9 +39,8 @@ define(['util'],function(util){
 		 		$(".guide-arrow-div").css("opacity","1");
 		 		$(".guide-arrow-div").css("right","35%");
 		 		$(".guide-arrow-div").css("top","40%");
-		 		return;
 		 	}
-		 	if(lightObject == "end"){
+		 	else if(lightObject == "end"){
 		 		var textIcon1 = $(textIcon).attr("src","../../templates/default/assets/image/mousewheel.png"),
 		 			arrow1 = $(arrow).append(mousewheel).append(textIcon1),
 		 			arrow2 = $(arrow).append(arrowIcon);
@@ -39,9 +54,8 @@ define(['util'],function(util){
 		 		$(arrow2).css("bottom","110px");
 		 		$(arrow2).css("left","170px");
 		 		$(arrow2).css("transform","rotate(-55deg)");
-		 		return scrollFun(); // gai 
 		 	}
-		 	if(lightObject == ".exitIcon"){
+		 	else if(lightObject == ".exitIcon"){
 		 		var textIcon1 = $(textIcon).attr("src","../../templates/default/assets/image/end.png"),
 		 			arrow1 = $(arrow).append(textIcon1),
 		 			arrow2 = $(arrow).append(arrowIcon);
@@ -55,17 +69,25 @@ define(['util'],function(util){
 		 		$(arrow2).css("bottom","110px");
 		 		$(arrow2).css("left","170px");
 		 		$(arrow2).css("transform","rotate(-55deg)");
-		 		return;
-		 	}
-		 	arrow = $(arrow).append(arrowIcon).append(textIcon);
-		 	$("body").append(arrow);
-		 	var positionJson = util.lightingOffset(lightObject);
-		 	$(".guide-arrow-div").css("left",positionJson.x+5);
-		 	$(".guide-arrow-div").css("top",positionJson.y-20);
+		 	}else{
+                arrow = $(arrow).append(arrowIcon).append(textIcon);
+		 	    $("body").append(arrow);
+		 	    var positionJson = util.lightingOffset(lightObject);
+		 	    $(".guide-arrow-div").css("left",positionJson.x+5);
+		 	    $(".guide-arrow-div").css("top",positionJson.y-20);
+            }
+            return {
+                    done:function(f){
+                        if(lightObject == "end"){
+                            postaction=f || function(){}
+                        }
+                    }
+                } 
+		 	
 		 }
     
     function createRhombus(){
-    	var rhombus = "<div class=\"rhombus red light-div\" onclick='graphfn();'></div>";
+    	var rhombus = "<div class=\"rhombus red \" onclick=''></div>";
     	var top = $(".top-chart>svg").css("height");
     	var rhombusSvg = $(".capi-main>g").eq(6).children();
 			top = util.pxToInt(top);
@@ -93,8 +115,7 @@ define(['util'],function(util){
 		}
     
     function createRect(){
-        console.log(3123);
-    	var rectOb = "<div class=\"rect light-div\" onclick='graphfn();'></div>";
+    	var rectOb = "<div class=\"rect \" onclick=''></div>";
     	var rectSvg = $(".capi-main>g").eq(3).children();
     	var top = $(".top-chart>svg").css("height"),
     		left,
@@ -105,7 +126,7 @@ define(['util'],function(util){
                 rectTop = svgRect.attr("y"),
     			rectWidth = svgRect.attr("width"),
     			rectHeight = svgRect.attr("height"),
-    			rectLeft = getTransform(rectSvg.eq(20),"left"),
+    			rectLeft = util.getTransform(rectSvg.eq(20),"left"),
     			rectBG = rectSvg.eq(20).attr("fill"),
     			rectTop= parseInt(rectTop) - top - bugTop  +"px";
     			//console.log(rectBG);
@@ -129,7 +150,7 @@ define(['util'],function(util){
     	    //return rectSvg;
     }
    function createTriangle(){
-    	var triangleOb = "<div class=\"triangle light-div\" onclick='graphfn();'></div>",
+    	var triangleOb = "<div class=\"triangle \" onclick=''></div>",
             triangleSvg = $(".capi-main>g").eq(5).children().not("circle"),
             svgTop = $(".top-chart>svg").css("height"),
             offset;
@@ -164,7 +185,7 @@ define(['util'],function(util){
     		//return triangleSvg;
     }
     function createCircle(){
-		var circleOb = "<div class=\"circle light-div\" onclick='graphfn();'></div>";
+		var circleOb = "<div class=\"circle\" onclick=''></div>";
 		var circleSvg = $(".capi-main>g").eq(5).children().not("path");
     	var svgTop = $(".top-chart>svg").css("height"),
     		left,
@@ -176,7 +197,7 @@ define(['util'],function(util){
                     circleTraform = util.getTransform(svgCircle),
     			 	scale = circleTraform.scale,
                     graphObejct = $(".circle").eq(0);
-    			width = pxToInt(graphObejct.css("width"))*scale;
+    			width = util.pxToInt(graphObejct.css("width"))*scale;
         	    		graphObejct.css("width",width);
                         graphObejct.css("height",width);
             offset = util.lightingOffset(svgCircle);
@@ -201,6 +222,7 @@ define(['util'],function(util){
 	}
     
     return{
+        'createArrow':createArrow,
         'createGraph':createGraph,
         'remove':remove
     }
