@@ -1,10 +1,5 @@
-require.config({
-    baseUrl:"guide_modules",
-    paths:{
-        "util":"util/util"
-    }
-});
-define(['util'],function(util){
+
+define(['util/util'],function(util){
     function wheel(){
 		var wheel_num=1;
 		function animate(){

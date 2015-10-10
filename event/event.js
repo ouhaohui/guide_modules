@@ -1,10 +1,5 @@
-requirejs.config({
-    baseUrl:"guide_modules",
-    paths:{
-        'util':"util/util"
-    }
-});
-define(['util'],function(util){
+
+define(['util/util'],function(util){
 function scrollFun(fn){
 		var dom = document.getElementsByTagName("body")[0],
 			num = 0,
@@ -15,7 +10,6 @@ function scrollFun(fn){
 		if(isIE<9){
 			 dom.attachEvent("onmousewheel",function(){
 		  	  if(num < 1){
-                  console.log(fn);
 					 fn();
 					 num++;
 				}
@@ -25,7 +19,6 @@ function scrollFun(fn){
 		else if(!isFF){
 			dom.addEventListener("mousewheel",function(e){
 		   	if(num < 1){
-                console.log(fn);
 					 fn();
 					 num++;
 				}
@@ -35,7 +28,6 @@ function scrollFun(fn){
 		else{
 			dom.addEventListener("DOMMouseScroll",function(e){
 				if(num < 1){
-                    console.log(fn);
 					 fn();
 					 num++;
 				}
@@ -50,7 +42,6 @@ function lightDialog(ob){
 			dialogMask = "<div class=\"dialog-mask\"></div>"; 
 			function maskEvent(eob){
 				$(eob).dblclick(function(e){
-				//console.log(e.target);
 				e.stopPropagation();
 		});
 			}

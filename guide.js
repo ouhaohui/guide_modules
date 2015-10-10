@@ -1,13 +1,4 @@
-require.config({
-    baseUrl:"guide_modules",
-    paths:{
-        "graphs":"graphs/graphs",
-        "util"  : "util/util",
-        "event" : "event/event"
-    }
-    
-});
-define(['graphs','util','event'],function(graphs,util,event){
+define(['graphs/graphs','util/util','event/event'],function(graphs,util,event){
 util.preloadimages(["../../templates/default/assets/image/wheel1.png","../../templates/default/assets/image/wheel2.png","../../templates/default/assets/image/wheel3.png","../../templates/default/assets/image/wheel4.png"]);
     (function init(){
 		 	$(".event-box").addClass("guide-object");
@@ -25,7 +16,7 @@ util.preloadimages(["../../templates/default/assets/image/wheel1.png","../../tem
 
 guide.prototype = {
 	initGuide:function(optionJson){
-		this.part = 2;
+		this.part = 0;
 		this.step = 0;
 		this.stepNode = 0;
 		this.interval;
@@ -127,9 +118,7 @@ guide.prototype = {
         var $this = this;
         $("body").one("dblclick", ".dbclick-div,.mask", function(e) {
                 var partOb = $this.guideObject;
-                console.log(partOb[0]);
                 function callback() {
-                    console.log($(".light-div"));
                     $(".top-chart>svg").trigger("dblclick");
                     $this.nextStep();
                 }

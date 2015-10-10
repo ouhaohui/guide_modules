@@ -1,9 +1,3 @@
-require.config({
-    baseUrl:"../",
-    paths:{
-       
-    }
-               });
 define(function(){
    function lightingOffset(lightObject){
 			var obOffset = $(lightObject).offset();
